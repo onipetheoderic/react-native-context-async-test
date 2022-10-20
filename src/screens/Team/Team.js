@@ -17,7 +17,11 @@ const Team = ({ route, navigation }) => {
   const { state } = React.useContext(OverallContext);
 
   const currentUserInfo = state.members.filter(user => user.id == id)[0];
-  const descriptionMaker = (arr, currentUserFirstName) => {
+  const descriptionMaker = (
+    arr,
+    currentUserFirstName,
+    currentUserExperience
+  ) => {
     if (arr.length > 0) {
       let experienceTotal = _.sumBy(arr, function (data) {
         return data.experience;
@@ -25,7 +29,9 @@ const Team = ({ route, navigation }) => {
       let firstNames = _.map(arr, "firstName");
       firstNames.unshift(currentUserFirstName);
       const describedArr = descriptive(firstNames, true);
-      return `Between ${describedArr}, this team of experts have a total of ${experienceTotal} years experience. You are in good hands.`;
+      return `Between ${describedArr}, this team of experts have a total of ${
+        experienceTotal + currentUserExperience
+      } years experience. You are in good hands.`;
     } else {
       return `Oops, ${currentUserFirstName} doesn’t have a team yet.`;
     }
@@ -69,7 +75,8 @@ const Team = ({ route, navigation }) => {
           <DescriptionText>
             {descriptionMaker(
               currentUserInfo.colleagues,
-              currentUserInfo.firstName
+              currentUserInfo.firstName,
+              currentUserInfo.experience
             )}
           </DescriptionText>
         </Description>

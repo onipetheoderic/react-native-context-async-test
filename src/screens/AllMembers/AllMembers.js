@@ -67,27 +67,14 @@ const AllMembers = ({ navigation }) => {
   };
   const currentData = state.members || [];
 
+  const NumberSort = arr => arr.sort((a, b) => b.experience - a.experience);
+
   function sortRelevance(arr, ascending) {
     // default to ascending
     if (typeof ascending === "undefined") ascending = true;
-
-    const multiplier = ascending ? 1 : -1;
-
-    const sorter = function (a, b) {
-      if (a.avatar === b.avatar)
-        // identical? return 0
-        return 0;
-      else if (a.avatar === "")
-        // a is null? last
-        return 1;
-      else if (b.avatar === "")
-        // b is null? last
-        return -1;
-      // compare, negate if descending
-      else return a.avatar.localeCompare(b.avatar) * multiplier;
-    };
-
-    return arr.sort(sorter);
+    let withAvatar = arr.filter(data => data.avatar !== "");
+    let withoutAvatar = arr.filter(data => data.avatar === "");
+    return [...NumberSort(withAvatar), ...NumberSort(withoutAvatar)];
   }
 
   return (
